@@ -3,7 +3,7 @@ using namespace std;
 
 int N, L, A[1000] = {}, anser;
 
-int input() {
+void input() {
     cin >> N >> L;
     for (int i = 0; i < N; i++) {
         cin >> A[i];
