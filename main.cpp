@@ -3,12 +3,14 @@ using namespace std;
 
 input() {}
 
-calc() {}
+int calc(M) {
+    return 48 - M;
+}
 
 output() {}
 
 main() {
     input();
-    calc();
+    m = calc(M);
     output();
 }
