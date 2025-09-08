@@ -13,10 +13,14 @@ int calc(M) {
     return 48 - M;
 }
 
-output() {}
+void output(int m)
+{
+    cout << m << endl;
+}
 
 main() {
-    input();
-    m = calc(M);
-    output();
+    int m;
+    input(m);
+    calc(m);
+    output(m);
 }
