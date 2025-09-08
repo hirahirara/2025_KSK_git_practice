@@ -3,8 +3,14 @@ using namespace std;
 
 input() {}
 
-int calc(int M) {
-    return 48 - M;
+int calc(int N, int L, std::vector<int> A) {
+    int cnt = 0;
+    for (int i = 0; i < N; i++) {
+        if (A[i] >= L) {
+            cnt++;
+        }
+    }
+    return cnt;
 }
 
 output() {}
