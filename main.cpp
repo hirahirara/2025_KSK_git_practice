@@ -5,10 +5,14 @@ input() {}
 
 calc() {}
 
-output() {}
+void output(int m)
+{
+    cout << m << endl;
+}
 
 main() {
-    input();
-    calc();
-    output();
+    int m;
+    input(m);
+    calc(m);
+    output(m);
 }
