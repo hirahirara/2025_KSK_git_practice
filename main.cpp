@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int N, L, A[1000] = {};
+int N, L, A[1000] = {}, anser;
 
 int input() {
 
@@ -11,8 +11,8 @@ int calc() {
 
 }
 
-void output(){
-
+void output() {
+    
 }
 
 int main() {
