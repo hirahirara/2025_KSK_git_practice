@@ -1,26 +1,22 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int N, L, A[1000] = {};
+
 int input() {
-    int M;
-    cout << "12月30日M時から次の年になるまでは何時間か" << endl;
-    cout << "Mの値を入力してください: ";
-    cin >> M;
-    return M;
+
 }
 
-int calc(int M) {
-    return 48 - M;
+int calc() {
+
 }
 
-void output(int m)
-{
-    cout << m << endl;
+void output(){
+
 }
 
 int main() {
-    int m;
-    m = input();
-    m = calc(m);
-    output(m);
+    input();
+    calc();
+    output();
 }
