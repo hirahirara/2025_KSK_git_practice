@@ -11,8 +11,8 @@ void output(int m)
 }
 
 main() {
-    int M, m;
-    input(M);
-    m = calc(M);
+    int m;
+    input(m);
+    m = calc(m);
     output(m);
 }
