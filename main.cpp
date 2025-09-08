@@ -4,13 +4,13 @@ using namespace std;
 input() {}
 
 int calc(M) {
-    return M + 12;
+    return 48 - M;
 }
 
 output() {}
 
 main() {
     input();
-    calc(M);
+    m = calc(M);
     output();
 }
