@@ -1,7 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-input() {}
+int input() {
+    int M;
+    cout << "12月30日M時から次の年になるまでは何時間か" << endl;
+    cout << "Mの値を入力してください: ";
+    cin >> M;
+    return M;
+}
 
 int calc(int N, int L, vector<int> A) {
     int cnt = 0;
@@ -13,27 +19,13 @@ int calc(int N, int L, vector<int> A) {
     return cnt;
 }
 
-<<<<<<< Updated upstream
-output() {}
-
-main() {
-    input();
-    m = calc(M);
-    output();
-=======
-int calc(int M) {
-    return 48 - M;
-}
-
 void output(int m) {
     cout << m << endl;
 }
 
-int main() {
+main() {
     int m;
     m = input();
     m = calc(m);
     output(m);
-    return 0;
->>>>>>> Stashed changes
 }
