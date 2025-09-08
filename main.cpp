@@ -9,7 +9,7 @@ int input() {
     return M;
 }
 
-int calc(M) {
+int calc(int M) {
     return 48 - M;
 }
 
@@ -20,7 +20,7 @@ void output(int m)
 
 main() {
     int m;
-    input(m);
-    calc(m);
+    m = input();
+    m = calc(m);
     output(m);
 }
