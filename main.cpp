@@ -4,16 +4,15 @@ using namespace std;
 int N, L, A[1000] = {}, anser;
 
 int input() {
-
+    cin >> N >> L;
+    for (int i = 0; i < N; i++) {
+        cin >> A[i];
+    }
 }
 
-int calc() {
+int calc() {}
 
-}
-
-void output() {
-    
-}
+void output() {}
 
 int main() {
     input();
