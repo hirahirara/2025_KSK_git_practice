@@ -3,7 +3,7 @@ using namespace std;
 
 input() {}
 
-int calc(M) {
+int calc(int M) {
     return 48 - M;
 }
 
