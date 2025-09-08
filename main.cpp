@@ -12,7 +12,7 @@ int calc() {
 }
 
 void output() {
-    
+    cout << anser << endl;
 }
 
 int main() {
