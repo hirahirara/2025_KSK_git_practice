@@ -18,7 +18,7 @@ void output(int m)
     cout << m << endl;
 }
 
-main() {
+int main() {
     int m;
     m = input();
     m = calc(m);
