@@ -12,7 +12,7 @@ int calc() {
 }
 
 void output() {
-    
+ssss
 }
 
 int main() {
