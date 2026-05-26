@@ -8,7 +8,7 @@ int input() {
 }
 
 int calc() {
-
+    hogehoge
 }
 
 void output() {
