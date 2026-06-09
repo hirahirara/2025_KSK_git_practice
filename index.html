@@ -1,279 +1,300 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-<meta charset="UTF-8">
-<title>シンプルオセロ</title>
-<style>
-body {
-    text-align: center;
-    font-family: sans-serif;
-}
+    <meta charset="UTF-8">
+    <title>シンプルオセロ</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: sans-serif;
+        }
 
-#board {
-    display: inline-grid;
-    grid-template-columns: repeat(8, 60px);
-    grid-template-rows: repeat(8, 60px);
-    gap: 2px;
-    background: #004400;
-    padding: 5px;
-}
+        #board {
+            display: inline-grid;
+            grid-template-columns: repeat(8, 60px);
+            grid-template-rows: repeat(8, 60px);
+            gap: 2px;
+            background: #004400;
+            padding: 5px;
+        }
 
-.cell {
-    width: 60px;
-    height: 60px;
-    background: #008800;
-    position: relative;
-    cursor: pointer;
-}
+        .cell {
+            width: 60px;
+            height: 60px;
+            background: #008800;
+            position: relative;
+            cursor: pointer;
+        }
 
-.cell.valid {
-    background: #00aa00;
-}
+        .cell.valid {
+            background: #00aa00;
+        }
 
-.stone {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    position: absolute;
-    top: 5px;
-    left: 5px;
-}
+        .stone {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
 
-.black {
-    background: black;
-}
+        .black {
+            background: black;
+        }
 
-.white {
-    background: white;
-    border: 1px solid black;
-}
-</style>
+        .white {
+            background: white;
+            border: 1px solid black;
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>オセロ</h1>
+    <h1>オセロ</h1>
 
-<div id="info"></div>
-<br>
+    <div id="info"></div>
+    <br>
 
-<div id="board"></div>
+    <div id="board"></div>
 
-<script>
-const SIZE = 8;
+    <script>
+        const SIZE = 8;
 
-const EMPTY = 0;
-const BLACK = 1;
-const WHITE = 2;
+        const EMPTY = 0;
+        const BLACK = 1;
+        const WHITE = 2;
 
-let currentPlayer = BLACK;
+        let currentPlayer = BLACK;
 
-let board = Array(SIZE).fill().map(() =>
-    Array(SIZE).fill(EMPTY)
-);
-
-// 初期配置
-board[3][3] = WHITE;
-board[4][4] = WHITE;
-board[3][4] = BLACK;
-board[4][3] = BLACK;
-
-const directions = [
-    [-1,-1],[-1,0],[-1,1],
-    [0,-1],       [0,1],
-    [1,-1],[1,0],[1,1]
-];
-
-function inRange(r,c){
-    return r>=0 && r<SIZE && c>=0 && c<SIZE;
-}
-
-function opponent(player){
-    return player===BLACK ? WHITE : BLACK;
-}
-
-function canPlace(r,c,player){
-
-    if(board[r][c] !== EMPTY)
-        return false;
-
-    const enemy = opponent(player);
-
-    for(const [dr,dc] of directions){
-
-        let nr = r + dr;
-        let nc = c + dc;
-
-        let foundEnemy = false;
-
-        while(inRange(nr,nc) && board[nr][nc] === enemy){
-            foundEnemy = true;
-            nr += dr;
-            nc += dc;
-        }
-
-        if(
-            foundEnemy &&
-            inRange(nr,nc) &&
-            board[nr][nc] === player
-        ){
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function getValidMoves(player){
-    const moves = [];
-
-    for(let r=0;r<SIZE;r++){
-        for(let c=0;c<SIZE;c++){
-            if(canPlace(r,c,player)){
-                moves.push([r,c]);
-            }
-        }
-    }
-
-    return moves;
-}
-
-function placeStone(r,c){
-
-    if(!canPlace(r,c,currentPlayer))
-        return;
-
-    board[r][c] = currentPlayer;
-
-    const enemy = opponent(currentPlayer);
-
-    for(const [dr,dc] of directions){
-
-        let nr = r + dr;
-        let nc = c + dc;
-
-        const flipList = [];
-
-        while(inRange(nr,nc) && board[nr][nc] === enemy){
-            flipList.push([nr,nc]);
-            nr += dr;
-            nc += dc;
-        }
-
-        if(
-            flipList.length > 0 &&
-            inRange(nr,nc) &&
-            board[nr][nc] === currentPlayer
-        ){
-            for(const [fr,fc] of flipList){
-                board[fr][fc] = currentPlayer;
-            }
-        }
-    }
-
-    currentPlayer = opponent(currentPlayer);
-
-    if(getValidMoves(currentPlayer).length === 0){
-
-        currentPlayer = opponent(currentPlayer);
-
-        if(getValidMoves(currentPlayer).length === 0){
-            finishGame();
-            return;
-        }
-
-        alert("置ける場所がないためパスします");
-    }
-
-    render();
-}
-
-function countStones(){
-    let black = 0;
-    let white = 0;
-
-    for(let r=0;r<SIZE;r++){
-        for(let c=0;c<SIZE;c++){
-            if(board[r][c] === BLACK) black++;
-            if(board[r][c] === WHITE) white++;
-        }
-    }
-
-    return {black,white};
-}
-
-function finishGame(){
-
-    const {black,white} = countStones();
-
-    let result;
-
-    if(black > white){
-        result = "黒の勝ち";
-    }else if(white > black){
-        result = "白の勝ち";
-    }else{
-        result = "引き分け";
-    }
-
-    render();
-
-    setTimeout(()=>{
-        alert(
-            `ゲーム終了\n黒:${black}\n白:${white}\n${result}`
+        let board = Array(SIZE).fill().map(() =>
+            Array(SIZE).fill(EMPTY)
         );
-    },100);
-}
 
-function render(){
+        // 初期配置
+        board[3][3] = WHITE;
+        board[4][4] = WHITE;
+        board[3][4] = BLACK;
+        board[4][3] = BLACK;
 
-    const boardDiv = document.getElementById("board");
-    boardDiv.innerHTML = "";
+        const directions = [
+            [-1, -1], [-1, 0], [-1, 1],
+            [0, -1], [0, 1],
+            [1, -1], [1, 0], [1, 1]
+        ];
 
-    const validMoves = getValidMoves(currentPlayer);
+        function inRange(r, c) {
+            return r >= 0 && r < SIZE && c >= 0 && c < SIZE;
+        }
 
-    for(let r=0;r<SIZE;r++){
-        for(let c=0;c<SIZE;c++){
+        function opponent(player) {
+            return player === BLACK ? WHITE : BLACK;
+        }
 
-            const cell = document.createElement("div");
-            cell.className = "cell";
+        function canPlace(r, c, player) {
 
-            const isValid = validMoves.some(
-                ([vr,vc]) => vr===r && vc===c
-            );
+            if (board[r][c] !== EMPTY)
+                return false;
 
-            if(isValid){
-                cell.classList.add("valid");
-            }
+            const enemy = opponent(player);
 
-            cell.onclick = () => placeStone(r,c);
+            for (const [dr, dc] of directions) {
 
-            if(board[r][c] !== EMPTY){
+                let nr = r + dr;
+                let nc = c + dc;
 
-                const stone = document.createElement("div");
-                stone.className = "stone";
+                let foundEnemy = false;
 
-                if(board[r][c] === BLACK){
-                    stone.classList.add("black");
-                }else{
-                    stone.classList.add("white");
+                while (inRange(nr, nc) && board[nr][nc] === enemy) {
+                    foundEnemy = true;
+                    nr += dr;
+                    nc += dc;
                 }
 
-                cell.appendChild(stone);
+                if (
+                    foundEnemy &&
+                    inRange(nr, nc) &&
+                    board[nr][nc] === player
+                ) {
+                    return true;
+                }
             }
 
-            boardDiv.appendChild(cell);
+            return false;
         }
-    }
 
-    const {black,white} = countStones();
+        function getValidMoves(player) {
+            const moves = [];
 
-    document.getElementById("info").innerHTML =
-        `現在の手番: ${currentPlayer===BLACK ? "黒" : "白"}<br>` +
-        `黒: ${black}　白: ${white}`;
-}
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+                    if (canPlace(r, c, player)) {
+                        moves.push([r, c]);
+                    }
+                }
+            }
 
-render();
-</script>
+            return moves;
+        }
+
+        function placeStone(r, c) {
+
+            if (!canPlace(r, c, currentPlayer))
+                return;
+
+            board[r][c] = currentPlayer;
+
+            const enemy = opponent(currentPlayer);
+
+            for (const [dr, dc] of directions) {
+
+                let nr = r + dr;
+                let nc = c + dc;
+
+                const flipList = [];
+
+                while (inRange(nr, nc) && board[nr][nc] === enemy) {
+                    flipList.push([nr, nc]);
+                    nr += dr;
+                    nc += dc;
+                }
+
+                if (
+                    flipList.length > 0 &&
+                    inRange(nr, nc) &&
+                    board[nr][nc] === currentPlayer
+                ) {
+                    for (const [fr, fc] of flipList) {
+                        board[fr][fc] = currentPlayer;
+                    }
+                }
+            }
+
+            currentPlayer = opponent(currentPlayer);
+
+            if (getValidMoves(currentPlayer).length === 0) {
+
+                currentPlayer = opponent(currentPlayer);
+
+                if (getValidMoves(currentPlayer).length === 0) {
+                    finishGame();
+                    return;
+                }
+
+                alert("置ける場所がないためパスします");
+            }
+
+            render();
+        }
+
+        function countStones() {
+            let black = 0;
+            let white = 0;
+
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+                    if (board[r][c] === BLACK) black++;
+                    if (board[r][c] === WHITE) white++;
+                }
+            }
+
+            return { black, white };
+        }
+
+        function finishGame() {
+
+            const { black, white } = countStones();
+
+            let result;
+
+            if (black > white) {
+                result = "黒の勝ち";
+            } else if (white > black) {
+                result = "白の勝ち";
+            } else {
+                result = "引き分け";
+            }
+
+            render();
+
+            setTimeout(() => {
+                alert(
+                    `ゲーム終了\n黒:${black}\n白:${white}\n${result}`
+                );
+            }, 100);
+        }
+
+        function CPU_play() {
+            moves = getValidMoves(currentPlayer);
+            let CPU_stone = Math.ceil(moves.length * Math.random());
+
+            console.log(moves[CPU_stone - 1]);
+            return moves[CPU_stone - 1];
+        }
+
+        function render() {
+
+            const boardDiv = document.getElementById("board");
+            boardDiv.innerHTML = "";
+
+            const validMoves = getValidMoves(currentPlayer);
+
+            for (let r = 0; r < SIZE; r++) {
+                for (let c = 0; c < SIZE; c++) {
+
+                    const cell = document.createElement("div");
+                    cell.className = "cell";
+
+                    const isValid = validMoves.some(
+                        ([vr, vc]) => vr === r && vc === c
+                    );
+
+                    if (isValid) {
+                        cell.classList.add("valid");
+                    }
+
+                    //変更
+                    if (currentPlayer === WHITE) {
+                        let [cr, cc] = CPU_play();
+                        placeStone(cr, cc);
+                    }
+                    else {
+                        cell.onclick = () => placeStone(r, c);
+
+                    }
+
+
+                    //
+                    if (board[r][c] !== EMPTY) {
+
+                        const stone = document.createElement("div");
+                        stone.className = "stone";
+
+                        if (board[r][c] === BLACK) {
+                            stone.classList.add("black");
+                        } else {
+                            stone.classList.add("white");
+                        }
+
+                        cell.appendChild(stone);
+                    }
+
+                    boardDiv.appendChild(cell);
+                }
+            }
+
+            const { black, white } = countStones();
+
+            document.getElementById("info").innerHTML =
+                `現在の手番: ${currentPlayer === BLACK ? "黒" : "白"}<br>` +
+                `黒: ${black}　白: ${white}`;
+        }
+
+        render();
+    </script>
 
 </body>
+
 </html>
